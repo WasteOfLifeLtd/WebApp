@@ -1,0 +1,12 @@
+﻿@model string[]
+@{
+    ViewBag.Title = "AuthorizationError";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+<div class="alert alert-danger">
+    @foreach (string s in Model)
+    {
+        @s
+    }
+</div>
+@Html.ActionLink("Back", "List", "Product", new { area = "" }, new { @class = "btn btn-primary" })

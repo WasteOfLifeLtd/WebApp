@@ -12,26 +12,22 @@
 <table id="cartTable" class="table">
     <thead>
         <tr>
-            <th>Quantity</th>
             <th>Item</th>
             <th class="text-right">Price</th>
-            <th class="text-right">Subtotal</th>
         </tr>
     </thead>
     <tbody>
-        @foreach (var line in Model.Cart.Lines)
+        @foreach (var book in Model.Cart.GetBooksInCart)
         {
             <tr>
-                <td class="text-center">@line.Quantity</td>
-                <td class="text-left">@line.Product.Name</td>
-                <td class="text-right">@line.Product.Price.ToString("c")</td>
-                <td class="text-right">@((line.Quantity * line.Product.Price).ToString("c"))</td>
+                <td class="text-left">@book.Title</td>
+                <td class="text-right">@book.Price.ToString("c")</td>
                 <td>
                     @using (Html.BeginForm("RemoveFromCart", "Cart"))
                     {
-                        @Html.Hidden("ProductId", line.Product.ProductID)
+                        @Html.Hidden("bookId", book.ID)
                         @Html.HiddenFor(x => x.ReturnUrl)
-                        <input class="btn btn-sm btn-warning" type="submit" value="Remove" />
+                        <input class="btn btn-sm btn-warning pull-right" type="submit" value="Remove" />
                     }
                 </td>
             </tr>
@@ -39,7 +35,7 @@
     </tbody>
     <tfoot>
         <tr>
-            <td colspan="3" class="text-right">Total:</td>
+            <td colspan="2" class="text-right">Total:</td>
             <td class="text-right">@Model.Cart.ComputeTotalValue().ToString("c")</td>
         </tr>
     </tfoot>

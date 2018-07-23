@@ -47,11 +47,11 @@ namespace SportsStore.Domain.Concrete
                 .AppendLine("A new order has been submitted")
                 .AppendLine("---")
                 .AppendLine("Items:");
-                foreach (var line in cart.Lines)
+                foreach (var book in cart.GetBooksInCart)
                 {
-                    var subtotal = line.Product.Price * line.Quantity;
-                    body.AppendFormat("{0} x {1} (subtotal: {2:c}", line.Quantity,
-                    line.Product.Name,
+                    var subtotal = book.Price;
+                    body.AppendFormat("{0} (subtotal: {1:c}", 
+                    book.Title,
                     subtotal);
                 }
                 body.AppendFormat("Total order value: {0:c}", cart.ComputeTotalValue())

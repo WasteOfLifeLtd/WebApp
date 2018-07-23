@@ -1,0 +1,26 @@
+﻿
+
+<div class="navbar-right">
+    @if (Context.User.Identity.IsAuthenticated)
+    {
+        <span class="navbar-text">Logged in as: @Context.User.Identity.Name</span>
+        @Html.ActionLink("Logout", "Logout", new { area = "Identity" }, new { @class = "btn btn-default navbar-btn" });
+        if (Context.User.IsInRole("Managers"))
+        {
+            @Html.ActionLink("Edit Customers", "Users", "UserAdmin", new { area = "Identity" }, new { @class = "btn btn-default navbar-btn" });
+            @Html.ActionLink("Edit Products", "Index", "Admin", null, new { @class = "btn btn-default navbar-btn" });
+        }
+        else if (Context.User.IsInRole("Administrators"))
+        {
+            @Html.ActionLink("Edit Roles", "Index", "RoleAdmin", new { area = "Identity" }, new { @class = "btn btn-default navbar-btn" });
+            @Html.ActionLink("Edit Customers", "Users", "UserAdmin", new { area = "Identity" }, new { @class = "btn btn-default navbar-btn" });
+            @Html.ActionLink("Edit Products", "Index", "Admin", new { area = "" }, new { @class = "btn btn-default navbar-btn" });
+        }
+    }
+    else
+    {
+        @Html.ActionLink("Login", "Login", new { area = "Identity", returnUrl = Request.Url.PathAndQuery }, new { @class = "btn btn-default navbar-btn" });
+    }
+
+</div>
+

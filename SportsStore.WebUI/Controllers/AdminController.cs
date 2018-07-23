@@ -3,45 +3,51 @@ using System.Web;
 using System.Web.Mvc;
 using System.Linq;
 using SportsStore.Domain.Entities;
+using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.Identity;
+using System.Threading.Tasks;
+using SportsStore.WebUI.Models;
+using System.Text;
 
 namespace SportsStore.WebUI.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = "Administrators")]
     public class AdminController : Controller
     {
-        private IProductsRepository repository;
+        private IBookRepository repository;
 
-        public AdminController(IProductsRepository repo) => repository = repo;
+        public AdminController(IBookRepository repo) => repository = repo;
 
         // GET: Admin
         public ViewResult Index()
         {
-            return View(repository.Products);
+            return View(repository.GetBooks());
         }
 
-        public ViewResult Edit(int productId)
+        public ViewResult Edit(int bookId)
         {
-            Product product = repository.Products.FirstOrDefault(p => p.ProductID == productId);
-            return View(product);
+            Book book = repository.GetBookById(bookId);
+            return View(book);
         }
 
         [HttpPost]
-        public ActionResult Edit(Product product, HttpPostedFileBase image = null)
+        public ActionResult Edit(Book book, HttpPostedFileBase image = null)
         {
             if (ModelState.IsValid)
             {
                 if (image != null )
                 {
-                    product.ImageMimeType = image.ContentType;
-                    product.ImageData = new byte[image.ContentLength];
-                    image.InputStream.Read(product.ImageData, 0, image.ContentLength);
+                    book.ImageMimeType = image.ContentType;
+                    book.CoverImage= new byte[image.ContentLength];
+                    image.InputStream.Read(book.CoverImage, 0, image.ContentLength);
                 }
-                repository.SaveProduct(product);
-                TempData["message"] = string.Format($"{product.Name} has been saved");
+                repository.UpdateBook(book);
+                repository.Save();
+                TempData["message"] = string.Format($"{book.Title} has been saved");
                 return RedirectToAction("Index");
             }
             else
-                return View(product);
+                return View(book);
         }
 
         public ViewResult Create()
@@ -50,12 +56,12 @@ namespace SportsStore.WebUI.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(int productId)
+        public ActionResult Delete(int bookId)
         {
-            Product deletedProduct = repository.DeleteProduct(productId);
-            if (deletedProduct != null)
+            Book deletedBook = repository.DeleteBook(bookId);
+            if (deletedBook!= null)
             {
-                TempData["message"] = string.Format($"{deletedProduct.Name} was deleted");
+                TempData["message"] = string.Format($"{deletedBook.Title} was deleted");
             }
             return RedirectToAction("Index");
         }

@@ -1,0 +1,25 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace SportsStore.Domain.Entities
+{
+    public class Category
+    {
+        [Required]
+        public int Id { get; set; }
+
+        [Required]
+        [MaxLength(40)]
+        [Index(IsUnique = true)]
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public virtual ICollection<Book> Books { get; set; }
+    }
+}

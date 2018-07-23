@@ -9,9 +9,9 @@ namespace SportsStore.WebUI.Controllers
     public class CartController : Controller
     {
         private IOrderProcessor orderProcessor;
-        private IProductsRepository repository;
+        private IBookRepository repository;
 
-        public CartController(IProductsRepository repo, IOrderProcessor proc) {
+        public CartController(IBookRepository repo, IOrderProcessor proc) {
             repository = repo;
             orderProcessor = proc; 
         }
@@ -25,22 +25,22 @@ namespace SportsStore.WebUI.Controllers
             });
         }
         
-        public RedirectToRouteResult AddToCart(Cart cart, int productId, string returnUrl)
+        public ActionResult AddToCart(Cart cart, int ID, string returnUrl)
         {
-            Product product = repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            Book book = repository.GetBookById(ID);
 
-            if (product != null)
-                cart.AddItem(product, 1);
+            if (book != null)
+                cart.AddItem(book);
 
             return RedirectToAction("Index", new { returnUrl });
         }
 
-        public RedirectToRouteResult RemoveFromCart(Cart cart, int productId, string returnUrl)
+        public RedirectToRouteResult RemoveFromCart(Cart cart, int bookId, string returnUrl)
         {
-            Product product = repository.Products.FirstOrDefault(p => p.ProductID == productId);
+            Book book = repository.GetBookById(bookId);
 
-            if (product != null)
-                cart.RemoveLine(product);
+            if (book != null)
+                cart.RemoveItem(book);
 
             return RedirectToAction("Index", new { returnUrl });
             
@@ -48,12 +48,25 @@ namespace SportsStore.WebUI.Controllers
 
         public PartialViewResult Summary(Cart cart) => PartialView(cart);
 
-        public ViewResult Checkout() => View(new ShippingDetails());
+
+        public ViewResult Checkout()
+        {
+            if(!HttpContext.User.Identity.IsAuthenticated)
+            {
+                //offer registration
+            }
+            else if (HttpContext.User.IsInRole("Managers") || HttpContext.User.IsInRole("Administrators"))
+            {
+                ModelState.AddModelError("", "Only Customers are allowed");
+                return View("AuthorizationError");
+            }
+            return View(new ShippingDetails());
+        }
 
         [HttpPost]
         public ViewResult Checkout(Cart cart, ShippingDetails shippingDetails)
         {
-            if (cart.Lines.Count() == 0)
+            if (cart.GetBooksInCart.Count() == 0)
                 ModelState.AddModelError("", "Sorry, your cart is empty!");
 
             if (ModelState.IsValid)

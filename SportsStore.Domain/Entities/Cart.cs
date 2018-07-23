@@ -5,36 +5,25 @@ namespace SportsStore.Domain.Entities
 {
     public class Cart
     {
-        private List<CartLine> lineCollection = new List<CartLine>();
+        private List<Book> Books = new List<Book>();
 
-        public void AddItem(Product product, int quantity)
+        public void AddItem(Book book)
         {
-            CartLine line = lineCollection
-                .Where(p => p.Product.ProductID == product.ProductID)
+            Book bookToAdd = Books
+                .Where(p => p.ID == book.ID)
                 .FirstOrDefault();
 
-            if (line == null)
-                lineCollection.Add(new CartLine { Product = product, Quantity = quantity });
-            else
-                line.Quantity += quantity;
+            if (bookToAdd == null)
+                Books.Add(book);            
         }
 
-        public void RemoveLine(Product product) =>
-            lineCollection.RemoveAll(l => l.Product.ProductID == product.ProductID);
+        public void RemoveItem(Book book) =>
+            Books.RemoveAll(x => x.ID == book.ID);
 
-        public decimal ComputeTotalValue() => lineCollection.Sum(e => e.Product.Price * e.Quantity);
+        public decimal ComputeTotalValue() => Books.Sum(e => e.Price);
 
-        public void Clear() => lineCollection.Clear();
+        public void Clear() => Books.Clear();
 
-        public IEnumerable<CartLine> Lines
-        {
-            get => lineCollection;
-        }
-    }
-
-    public class CartLine
-    {
-        public Product Product { get; set; }
-        public int Quantity { get; set; }
+        public IEnumerable<Book> GetBooksInCart { get { return Books; }  }
     }
 }

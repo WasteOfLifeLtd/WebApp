@@ -1,12 +1,12 @@
-﻿@model SportsStore.WebUI.Models.ProductsListViewModel
+﻿@model SportsStore.WebUI.Models.BookListViewModel
 
 @{
     ViewBag.Title = "Products";
 }
 
-@foreach (var p in Model.Products)
+@foreach (var p in Model.Books)
 {
-    @Html.Partial("ProductSummary", p)
+    @Html.Partial("BookSummary", p)
 }
 
 <div class="btn-group pull-right">

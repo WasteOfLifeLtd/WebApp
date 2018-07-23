@@ -8,6 +8,6 @@
 
 <div class="navbar-text navbar-right">
     <b>Your cart:</b>
-    @Model.Lines.Sum(x => x.Quantity) item(s),
+    @Model.GetBooksInCart.Count() item(s),
     @Model.ComputeTotalValue().ToString("c")
 </div>

@@ -17,9 +17,16 @@
 </head>
 <body>
     <div>
-        @if (TempData["message"] != null)
+        @if (ViewData.ModelState.Values.SelectMany(x => x.Errors).Count() != 0)
         {
-            <div class="alert alert-success">@TempData["message"]</div>
+        <div class="alert alert-warning">
+            @foreach (var error in ViewData.ModelState.Values.SelectMany(x => x.Errors))
+            {
+                <p>@error.ErrorMessage</p>
+            }
+        </div>
+        }
+             @if (TempData["message"] != null) { <div class="alert alert-success">@TempData["message"]</div>
         }
         @RenderBody()
     </div>

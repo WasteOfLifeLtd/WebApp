@@ -8,8 +8,7 @@ using Ninject;
 using SportsStore.Domain.Abstract;
 using SportsStore.Domain.Entities;
 using SportsStore.Domain.Concrete;
-using SportsStore.WebUI.Infrastructure.Abstract;
-using SportsStore.WebUI.Infrastructure.Concrete;
+using SportsStore.Domain.Concrete.Repositories;
 
 namespace SportsStore.WebUI.Infrastructure
 {
@@ -34,7 +33,7 @@ namespace SportsStore.WebUI.Infrastructure
             };
             kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>().WithConstructorArgument("settings", emailSettings);
             kernel.Bind<IProductsRepository>().To<EFProductRepository>();
-            kernel.Bind<IAuthProvider>().To<FormsAuthProvider>();
+            kernel.Bind<IBookRepository>().To<BookRepository>();
         }
     }
 }

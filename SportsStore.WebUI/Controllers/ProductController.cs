@@ -11,18 +11,18 @@ namespace SportsStore.WebUI.Controllers
 {
     public class ProductController : Controller
     {
-        private IProductsRepository repository;
+        private IBookRepository repository;
         public int PageSize = 4;
 
-        public ProductController(IProductsRepository productRepository) => this.repository = productRepository;
+        public ProductController(IBookRepository productRepository) => this.repository = productRepository;
 
-        public ViewResult List(string category, int page = 1)
+        public ViewResult List(Category category, int page = 1)
         {
-            ProductsListViewModel model = new ProductsListViewModel
+            BookListViewModel model = new BookListViewModel
             {
-                Products = repository.Products
+                Books = repository.GetBooks()
                 .Where(p => category == null || p.Category == category)
-                .OrderBy(p => p.ProductID)
+                .OrderBy(p => p.ID)
                 .Skip((page - 1) * PageSize)
                 .Take(PageSize),
                 PagingInfo = new PagingInfo
@@ -30,20 +30,20 @@ namespace SportsStore.WebUI.Controllers
                     CurrentPage = page,
                     ItemsPerPage = PageSize,
                     TotalItems = category == null ?
-                    repository.Products.Count() :
-                    repository.Products.Where(e => e.Category == category).Count()
+                    repository.GetBooks().Count() :
+                    repository.GetBooks().Where(e => e.Category == category).Count()
                 },
                 CurrentCategory = category
             };
             return View(model);
         }
 
-        public FileContentResult GetImage(int productId)
+        public FileContentResult GetImage(int ID)
         {
-            Product prod = repository.Products.FirstOrDefault(p => p.ProductID == productId);
-            if(prod != null)
+            Book book = repository.GetBookById(ID);
+            if(book != null)
             {
-                return File(prod.ImageData, prod.ImageMimeType);
+                return File(book.CoverImage, book.ImageMimeType);
             }
             else
             {

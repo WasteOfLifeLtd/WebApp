@@ -1,0 +1,42 @@
+﻿@model SportsStore.Domain.Entities.Book
+@using System.Text;
+
+<div class="well">
+
+    @if (Model.CoverImage != null)
+    {
+        <div class="pull-left" style="margin-right: 10px">
+            <img class="img-thumbnail" width="75" height="75"
+                 src="@Url.Action("GetImage", "Product", new { Model.ID })" />
+        </div>
+    }
+
+    <h3>
+        <strong>@Model.Title</strong>
+        <span class="pull-right label label-primary">@Model.Price.ToString("c")</span>
+    </h3>
+
+    <span>@Model.ISBN</span><br />
+
+    @{
+        StringBuilder sb = new StringBuilder();
+        foreach (var author in Model.Authors)
+        {
+            sb.Append(author.FirstName + " " + author.LastName + ", ");
+        }
+        sb.Remove(sb.Length - 2, 2);
+        <span class="lead">@sb.ToString()</span>
+        <br />
+    }
+
+
+    @using (Html.BeginForm("AddToCart", "Cart"))
+    {
+        <div class="pull-right">
+            @Html.HiddenFor(x => x.ID)
+            @Html.Hidden("returnUrl", Request.Url.PathAndQuery)
+            <input type="submit" class="btn btn-success" value="Add to cart" />
+        </div>
+    }
+    <span> @string.Concat(Model.Description.Substring(0, 225), ("..."))</span>
+</div>
