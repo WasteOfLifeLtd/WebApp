@@ -42,8 +42,7 @@
         @Html.HiddenFor(x => x.Authors)
         <div class="form-group">
             <label>Authors</label><br/>
-            @{try
-                {
+            @{ 
                     StringBuilder sb = new StringBuilder();
                     foreach (var author in Model.Authors)
                     {
@@ -51,8 +50,7 @@
                     }
                     sb.Remove(sb.Length - 2, 2);
                 <span>@sb.ToString()</span>
-                }
-                catch (Exception e) { }
+                
             }
         </div>
         @Html.HiddenFor(x => x.Category)

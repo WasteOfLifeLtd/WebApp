@@ -50,10 +50,10 @@ namespace SportsStore.WebUI.Controllers
                 return View(book);
         }
 
-        public ViewResult Create()
-        {
-            return View("Edit", new Product());
-        }
+        //public ViewResult Create()
+        //{
+        //    return View("Edit", new Product());
+        //}
 
         [HttpPost]
         public ActionResult Delete(int bookId)

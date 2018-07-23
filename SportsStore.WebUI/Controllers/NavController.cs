@@ -2,14 +2,15 @@
 using System.Linq;
 using SportsStore.Domain.Abstract;
 using System.Web.Mvc;
+using SportsStore.Domain.Entities;
 
 namespace SportsStore.WebUI.Controllers
 {
     public class NavController : Controller
     {
-        private IProductsRepository repository;
+        private  IBookRepository repository;
 
-        public NavController(IProductsRepository repo)
+        public NavController(IBookRepository repo)
         {
             repository = repo;
         }
@@ -18,7 +19,7 @@ namespace SportsStore.WebUI.Controllers
         {
             ViewBag.SelectedCategory = category;
 
-            IEnumerable<string> categories = repository.Products
+            IEnumerable<Category> categories = repository.GetBooks()
                                 .Select(x => x.Category)
                                 .Distinct()
                                 .OrderBy(x => x);

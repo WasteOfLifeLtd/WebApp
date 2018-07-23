@@ -17,13 +17,13 @@
         }
         @Html.Action("LoginSummary", "Account", new { area = "Identity" })
     </div>
-    <div class="row panel">
+    @*<div class="row panel">
         <div id="categories" class="col-xs-3">
             @Html.Action("Menu", "Nav")
-        </div>
-        <div class="col-xs-8">
+        </div>*@
+        <div>
             @RenderBody()
         </div>
-    </div>
+    @*</div>*@
 </body>
 </html>

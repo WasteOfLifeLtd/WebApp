@@ -102,7 +102,6 @@
   <ItemGroup>
     <Compile Include="Abstract\IBookRepository.cs" />
     <Compile Include="Abstract\IOrderProcessor.cs" />
-    <Compile Include="Abstract\IProductsRepository.cs" />
     <Compile Include="Concrete\AppIdentityDbContext.cs" />
     <Compile Include="Concrete\EmailOrderProcessor.cs" />
     <Compile Include="Concrete\Repositories\BookRepository.cs" />
